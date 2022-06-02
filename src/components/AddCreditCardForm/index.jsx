@@ -1,7 +1,8 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Form from '@rjsf/material-ui';
 import './addCreditCardForm.css';
 import { GlobalContextDispatch } from '../ApplicationContainer/AppContainer';
+import CreditCardMock from '../CreditCardMock';
 
 const getDefaultValuesForEdit = (props, editVal) => {
   if (props.editCreditCardOpen) {
@@ -11,6 +12,9 @@ const getDefaultValuesForEdit = (props, editVal) => {
 };
 
 const AddCreditCardForm = (props) => {
+  console.log('The props are', props);
+  const [formData, setFormData] = useState({});
+
   const dispatch = useContext(GlobalContextDispatch);
   const schema = {
     type: 'object',
@@ -40,7 +44,6 @@ const AddCreditCardForm = (props) => {
     },
   };
 
-  console.log('The props are', props);
   return (
     <>
       <button
@@ -53,8 +56,15 @@ const AddCreditCardForm = (props) => {
       >
         BACK
       </button>
+      <div className='credit-card-container'>
+        <CreditCardMock />
+      </div>
       <Form
         schema={schema}
+        onChange={({ formData }) => {
+          console.log('formData', { ...formData });
+          setFormData(formData);
+        }}
         onSubmit={({ formData }) => {
           if (props.editCreditCardOpen) {
             props.editCreditCard(props.editCreditCardFormData.id, formData);
