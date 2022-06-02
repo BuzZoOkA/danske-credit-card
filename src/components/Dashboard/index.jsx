@@ -8,7 +8,7 @@ const Dashboard = (props) => {
       <button
         className='add-button-container'
         onClick={() => {
-          props.setEditCreditCardOpen(true);
+          props.setFormOpen(true);
         }}
       >
         + Add Credit Card
@@ -18,6 +18,7 @@ const Dashboard = (props) => {
           <CreditCardListItem
             key={card.id}
             deleteCreditCard={props.deleteCreditCard}
+            setDeleteCard={props.setDeleteCard}
             setEditCreditCardOpen={props.setEditCreditCardOpen}
             {...card}
           />

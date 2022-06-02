@@ -19,6 +19,11 @@ const reducer = (state, action) => {
     case 'LOAD_DASHBOARD_DATA': {
       return Object.assign({}, state, { creditCardData: action.payload });
     }
+    case 'EDIT_CREDIT_CARD_FORM_DATA': {
+      return Object.assign({}, state, {
+        editCreditCardFormData: action.payload,
+      });
+    }
     default:
       return state;
   }
@@ -34,17 +39,19 @@ const deleteCreditCard = async (id) => {
   await deleteDoc(userDoc);
 };
 
-const editCreditCard = async (formData) => {
-  const userDoc = doc(creditCardsDataRef, formData.id);
-  await updateDoc(creditCardsDataRef, { ...formData });
+const editCreditCard = async (id, formData) => {
+  const userDoc = doc(db, 'creditCardsData', id);
+  await updateDoc(userDoc, formData);
 };
 
 const AppContainer = (props) => {
   const [state, dispatch] = useReducer(reducer, {
     creditCardData: [],
+    editCreditCardFormData: {},
   });
   const [formOpen, setFormOpen] = useState(false);
   const [editCreditCardOpen, setEditCreditCardOpen] = useState(false);
+  const [deleteCard, setDeleteCard] = useState('');
 
   useEffect(() => {
     const getCreditCardsData = async () => {
@@ -56,26 +63,28 @@ const AppContainer = (props) => {
       dispatch({ type: 'LOAD_DASHBOARD_DATA', payload: creditCardsData });
     };
     getCreditCardsData();
-  }, [formOpen]);
+  }, [formOpen, editCreditCardOpen, deleteCard]);
 
-  console.log('The state of the application is', state);
   return (
     <GlobalContextDispatch.Provider value={dispatch}>
       <div className='app-container'>
         {formOpen || editCreditCardOpen ? (
           <AddCreditCardForm
-            setFormOpen={setFormOpen}
+            addCreditCard={addCreditCard}
             formOpen={formOpen}
+            setFormOpen={setFormOpen}
             editCreditCardOpen={editCreditCardOpen}
             setEditCreditCardOpen={setEditCreditCardOpen}
-            addCreditCard={addCreditCard}
+            editCreditCardFormData={state.editCreditCardFormData}
             editCreditCard={editCreditCard}
+            setDeleteCard
           />
         ) : (
           <Dashboard
             deleteCreditCard={deleteCreditCard}
-            editCreditCard={editCreditCard}
             setEditCreditCardOpen={setEditCreditCardOpen}
+            setFormOpen={setFormOpen}
+            setDeleteCard={setDeleteCard}
             {...state}
           />
         )}
