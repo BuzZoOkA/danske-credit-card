@@ -1,0 +1,61 @@
+.list-item {
+    position: relative;
+    height: 100px;
+    background-color: #fff;
+    margin: 5px 5px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    font-size: 12px;
+    min-width: 400px;
+    max-width: 600px;
+}
+
+.valid-thru-container {
+    padding: 5px;
+    position: absolute;
+    top: 20px;
+    right: 100px;
+    display: flex;
+    height: 100px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.card-name-container {
+    padding: 5px;
+    display: flex;
+    height: 100px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.button-container {
+    padding: 5px;
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    display: flex;
+    height: 100px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+
+.btn{
+    padding: 5px;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 10px;
+    border: 1px;
+}
+
+.edit {
+    background-color: rgb(230, 154, 13);
+}
+
+.delete {
+    background-color: rgb(230, 93, 13);
+}
