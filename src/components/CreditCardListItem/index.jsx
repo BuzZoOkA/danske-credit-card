@@ -1,18 +1,23 @@
 import { useContext } from 'react';
 import './creditCardListItem.css';
-import { GlobalContextDispatch } from '../ApplicationContainer/AppContainer';
+import { db } from '../../firebase_config';
+import { collection, deleteDoc, doc } from 'firebase/firestore';
+
+const creditCardsDataRef = collection(db, 'creditCardsData');
+
+const deleteCreditCard = async (id) => {
+  const userDoc = doc(creditCardsDataRef, id);
+  await deleteDoc(userDoc);
+};
 
 const CreditCardListItem = ({
   cardHolder,
   cardNumber,
   id,
   valid,
-  deleteCreditCard,
   setEditCreditCardOpen,
-  securityCode,
   setDeleteCard,
 }) => {
-  const dispatch = useContext(GlobalContextDispatch);
   return (
     <div className='list-item'>
       <div className='card-name-container'>
@@ -26,8 +31,8 @@ const CreditCardListItem = ({
         <button
           className='btn delete'
           onClick={() => {
-            deleteCreditCard(id);
             setDeleteCard(id);
+            deleteCreditCard(id);
           }}
         >
           Delete Card
@@ -35,11 +40,8 @@ const CreditCardListItem = ({
         <button
           className='btn edit'
           onClick={() => {
+            setDeleteCard(id);
             setEditCreditCardOpen(true);
-            dispatch({
-              type: 'EDIT_CREDIT_CARD_FORM_DATA',
-              payload: { cardHolder, cardNumber, id, valid, securityCode },
-            });
           }}
         >
           Edit Card

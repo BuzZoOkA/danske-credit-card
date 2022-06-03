@@ -1,11 +1,17 @@
+import './creditCardMock.css';
 const CreditCardMock = (props) => {
   return (
-    <>
-      {props.cardNumber}
-      {props.cardHolder}
-      {props.securityCode}
-      {props.valid}
-    </>
+    <div className='credit-card-container'>
+      <div className='card-number'>{props.cardNumber}</div>
+      <div className='card-holder'>
+        Cardholder Name
+        <div className='card-holder-name'> {props.cardHolder}</div>
+      </div>
+      <div className='valid-thru'>
+        <div className='valid-thru-text'>Valid Thru</div>
+        {props.valid}
+      </div>
+    </div>
   );
 };
 

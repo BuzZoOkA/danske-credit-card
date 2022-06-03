@@ -1,0 +1,38 @@
+.credit-card-container {
+    margin: 2px;
+    padding: 5px;
+    background-color: #4f67ec;
+    color: #fff;
+    height: 150px ;
+    border-radius: 8px;
+    position: relative;
+}
+
+
+.card-number {
+    font-size: 25px;
+    position: absolute;
+    top: 40%;
+    left: 20px;
+}
+
+.card-holder {
+    font-size: 10px;
+    position: absolute;
+    top: 70%;
+    left: 20px;
+}
+
+.card-holder-name {
+    font-size: 15px;
+}
+
+.valid-thru {
+    position: absolute;
+    top: 70%;
+    right: 20px;
+}
+
+.valid-thru-text {
+    font-size: 10px;
+}

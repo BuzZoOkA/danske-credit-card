@@ -1,21 +1,41 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
+import { cloneDeep } from 'lodash';
 import Form from '@rjsf/material-ui';
 import './addCreditCardForm.css';
-import { GlobalContextDispatch } from '../ApplicationContainer/AppContainer';
 import CreditCardMock from '../CreditCardMock';
+import { db } from '../../firebase_config';
+import { collection, addDoc, updateDoc, doc, getDoc } from 'firebase/firestore';
 
-const getDefaultValuesForEdit = (props, editVal) => {
-  if (props.editCreditCardOpen) {
-    return props.editCreditCardFormData[editVal];
-  }
-  return '';
-};
+const creditCardsDataRef = collection(db, 'creditCardsData');
 
 const AddCreditCardForm = (props) => {
-  console.log('The props are', props);
-  const [formData, setFormData] = useState({});
+  const [docEditing, setDocEditing] = useState({});
 
-  const dispatch = useContext(GlobalContextDispatch);
+  useEffect(() => {
+    if (props.editCreditCardOpen && props.deleteCard) {
+      const getDocument = async (id) => {
+        const userDoc = doc(db, 'creditCardsData', id);
+        const docSnap = await getDoc(userDoc);
+        setDocEditing(docSnap.data());
+      };
+      getDocument(props.deleteCard);
+    }
+  }, [props.deleteCard]);
+  const addCreditCard = async (formData) => {
+    await addDoc(creditCardsDataRef, { ...formData });
+  };
+
+  const editCreditCard = async (id, formData) => {
+    const userDoc = doc(db, 'creditCardsData', id);
+    await updateDoc(userDoc, formData);
+  };
+
+  const getDefaultValuesForEdit = (docEditing, editVal) => {
+    if (props.editCreditCardOpen) {
+      return docEditing[editVal];
+    }
+  };
+
   const schema = {
     type: 'object',
     required: ['cardNumber', 'valid', 'cardHolder', 'securityCode'],
@@ -24,26 +44,25 @@ const AddCreditCardForm = (props) => {
         type: 'string',
         title: 'Card Number',
         placeholder: 'cc',
-        default: getDefaultValuesForEdit(props, 'cardNumber'),
+        default: getDefaultValuesForEdit(docEditing, 'cardNumber'),
       },
       valid: {
         type: 'string',
         title: 'Valid Thru',
-        default: getDefaultValuesForEdit(props, 'valid'),
+        default: getDefaultValuesForEdit(docEditing, 'valid'),
       },
       cardHolder: {
         type: 'string',
         title: 'Card Holdername',
-        default: getDefaultValuesForEdit(props, 'cardHolder'),
+        default: getDefaultValuesForEdit(docEditing, 'cardHolder'),
       },
       securityCode: {
         type: 'string',
         title: 'Security Code CVV',
-        default: getDefaultValuesForEdit(props, 'securityCode'),
+        default: getDefaultValuesForEdit(docEditing, 'securityCode'),
       },
     },
   };
-
   return (
     <>
       <button
@@ -56,25 +75,20 @@ const AddCreditCardForm = (props) => {
       >
         BACK
       </button>
-      <div className='credit-card-container'>
-        <CreditCardMock />
-      </div>
+      {props.editCreditCardOpen && <CreditCardMock {...docEditing} />}
       <Form
         schema={schema}
         onChange={({ formData }) => {
-          console.log('formData', { ...formData });
-          setFormData(formData);
+          if (props.editCreditCardOpen) {
+            setDocEditing((prevState) => ({ ...prevState, ...formData }));
+          }
         }}
         onSubmit={({ formData }) => {
           if (props.editCreditCardOpen) {
-            props.editCreditCard(props.editCreditCardFormData.id, formData);
+            editCreditCard(props.deleteCard, formData);
             props.setEditCreditCardOpen(false);
-            dispatch({
-              type: 'EDIT_CREDIT_CARD_FORM_DATA',
-              payload: {},
-            });
           } else {
-            props.addCreditCard(formData);
+            addCreditCard(formData);
             props.setFormOpen(false);
           }
         }}

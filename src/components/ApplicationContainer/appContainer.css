@@ -5,6 +5,10 @@ body {
   position: relative;
 }
 
+button{
+  cursor: pointer;
+}
+
 .app-container {
   position: relative;
   background-color: rgb(241, 243, 244);

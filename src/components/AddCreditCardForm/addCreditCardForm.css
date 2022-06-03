@@ -17,12 +17,3 @@ Form {
     letter-spacing: 0.02857em;
     text-transform: uppercase;
 }
-
-.credit-card-container {
-    margin: 2px;
-    padding: 5px;
-    background-color: #4f67ec;
-    color: #fff;
-    height: 150px ;
-    border-radius: 8px;
-}
