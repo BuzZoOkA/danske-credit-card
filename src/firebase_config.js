@@ -6,7 +6,6 @@ import { getFirestore } from '@firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyDCQ7rTDv1qK-G17llHEwM8f2WNDX25yts',
   authDomain: 'hack-ideas-bd851.firebaseapp.com',
   projectId: 'hack-ideas-bd851',
   storageBucket: 'hack-ideas-bd851.appspot.com',
